@@ -8,6 +8,14 @@
       @input="setProductNameToCreate($event.target.value)"
       @keypress.enter="triggerAddProductAction"
     />
+    <input
+      placeholder="product type..."
+      class="product-type-input"
+      type="text"
+      :value="productTypeToCreate"
+      @input="setProductTypeToCreate($event.target.value)"
+      @keypress.enter="triggerAddProductAction"
+    />
     <div
       :class="{ disabled: productCreationPending }"
       class="create-product-btn"
@@ -24,10 +32,12 @@ import { mapMutations, mapState, mapActions } from 'vuex'
 export default {
   computed: mapState('products', [
     'productNameToCreate',
+    'productTypeToCreate',
     'productCreationPending'
   ]),
   methods: {
     ...mapMutations('products', ['setProductNameToCreate']),
+    ...mapMutations('products', ['setProductTypeToCreate']),
     ...mapActions('products', ['triggerAddProductAction'])
   }
 }
@@ -42,6 +52,17 @@ export default {
   justify-content: center;
 
   .product-name-input {
+    padding-left: 5px;
+    height: 30px;
+    width: 150px;
+    outline: none;
+    font: inherit;
+    border: 1px solid;
+    border-color: #2c3e50;
+    border-radius: 3px;
+  }
+
+  .product-type-input {
     padding-left: 5px;
     height: 30px;
     width: 150px;

@@ -3,6 +3,9 @@ export default {
   setProductNameToCreate: (state, productNameToCreate) =>
     (state.productNameToCreate = productNameToCreate),
 
+  setProductTypeToCreate: (state, productTypeToCreate) =>
+    (state.productTypeToCreate = productTypeToCreate),
+
   /* Products */
   setProducts: (state, products) => (state.products = products),
   addProduct: (state, product) => state.products.push(product),

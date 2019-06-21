@@ -27,10 +27,15 @@ export default {
    * Create a new product for current loggedin user and reset product name input
    */
   triggerAddProductAction: ({ dispatch, state, commit }) => {
-    if (state.productNameToCreate === '') return
+    if (state.productNameToCreate === '' || state.productTypeToCreate === '')
+      return
 
-    const product = { name: state.productNameToCreate }
+    const product = {
+      name: state.productNameToCreate,
+      type: state.productTypeToCreate
+    }
     commit('setProductNameToCreate', '')
+    commit('setProductTypeToCreate', '')
     dispatch('createUserProduct', product)
   },
 

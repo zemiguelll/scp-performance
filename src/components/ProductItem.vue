@@ -1,6 +1,6 @@
 <template>
   <div class="product-item">
-    <div>#{{ index }} {{ data.name }}</div>
+    <div>#{{ index }} {{ data.name }} {{ data.type }}</div>
     <div
       v-if="!disableActions"
       class="delete-btn"

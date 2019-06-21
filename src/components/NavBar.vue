@@ -14,6 +14,9 @@
         <div v-if="!isUserLoggedIn && networkOnLine" class="nav-item">
           <router-link to="/login">Login</router-link>
         </div>
+        <div v-if="!isUserLoggedIn && networkOnLine" class="nav-item">
+          <router-link to="/register">Register</router-link>
+        </div>
         <div
           v-if="isUserLoggedIn && networkOnLine"
           class="nav-item logout-item"
@@ -30,6 +33,13 @@
         :src="user.photoURL"
         alt="Avatar"
       />
+      <div
+        v-if="isUserLoggedIn && networkOnLine"
+        class="nav-item logout-item"
+        @click="logout"
+      >
+        <a>{{ user.age }}</a>
+      </div>
     </div>
   </header>
 </template>

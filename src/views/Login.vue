@@ -12,11 +12,33 @@
 
     <p v-if="loginError">{{ loginError }}</p>
     <!-- Auth UI -->
+    <input
+      v-model="email"
+      type="email"
+      class="login-input"
+      required
+      placeholder="Email"
+    />
+    <input
+      v-model="password"
+      type="password"
+      class="login-input"
+      required
+      placeholder="Password"
+    />
     <div
       v-show="user !== undefined && !user && networkOnLine"
       data-test="login-btn"
       class="login-btn"
-      @click="login"
+      @click="login('email')"
+    >
+      Login with email
+    </div>
+    <div
+      v-show="user !== undefined && !user && networkOnLine"
+      data-test="login-btn"
+      class="login-btn"
+      @click="login('google')"
     >
       Login with google
     </div>
@@ -30,7 +52,7 @@ import firebase from 'firebase/app'
 import { desktop as isDekstop } from 'is_js'
 
 export default {
-  data: () => ({ loginError: null }),
+  data: () => ({ loginError: null, email: '', password: '' }),
   head: {
     title: {
       inner: 'Login'
@@ -62,21 +84,32 @@ export default {
   },
   methods: {
     ...mapMutations('authentication', ['setUser']),
-    async login() {
+    async login(type) {
       this.loginError = null
-      const provider = new firebase.auth.GoogleAuthProvider()
-      this.setUser(undefined)
+      if (type === 'google') {
+        const provider = new firebase.auth.GoogleAuthProvider()
+        this.setUser(undefined)
 
-      try {
-        // Firebase signin with popup is faster than redirect
-        // but we can't use it on mobile because it's not well supported
-        // when app is running as standalone on ios & android
-        isDekstop()
-          ? await firebase.auth().signInWithPopup(provider)
-          : await firebase.auth().signInWithRedirect(provider)
-      } catch (err) {
-        this.loginError = err
-        this.setUser(null)
+        try {
+          // Firebase signin with popup is faster than redirect
+          // but we can't use it on mobile because it's not well supported
+          // when app is running as standalone on ios & android
+          isDekstop()
+            ? await firebase.auth().signInWithPopup(provider)
+            : await firebase.auth().signInWithRedirect(provider)
+        } catch (err) {
+          this.loginError = err
+          this.setUser(null)
+        }
+      } else if (type === 'email') {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.email, this.password)
+          .catch(function(error) {
+            // Handle Errors here.
+            this.loginError(error.message)
+            // ...
+          })
       }
     }
   }
@@ -109,6 +142,17 @@ export default {
       color: $vue-color;
       border-color: $vue-color;
     }
+  }
+  .login-input {
+    margin-top: 10px;
+    padding-left: 5px;
+    height: 30px;
+    width: 225px;
+    outline: none;
+    font: inherit;
+    border: 1px solid;
+    border-color: #2c3e50;
+    border-radius: 3px;
   }
 }
 </style>
