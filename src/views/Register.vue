@@ -107,28 +107,14 @@ export default {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
-        .then(function(newUser) {
-          newUser.user.updateProfile({
-            displayName: displayName,
-            photoURL: photoURL
-          })
-          console.log('newUser: ' + newUser)
-        })
-        .catch(function(error) {
-          // Handle Errors here.
-          console.log(error)
-          this.registerError(error.message)
-          // ...
-        })
         .then(function() {
-          const user = firebase.auth().currentUser
-          console.log('User: ' + user.uid)
+          const newUser = firebase.auth().currentUser
           firebase
-            .database()
-            .ref('users/' + user.uid)
-            .set({
-              age: age
-            })
+            .firestore()
+            .collection('users')
+            .doc(newUser.uid)
+            .set({ displayName: displayName, photoURL: photoURL, age: age })
+          console.log('newUser: ' + newUser)
         })
         .catch(function(error) {
           // Handle Errors here.
